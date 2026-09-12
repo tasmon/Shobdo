@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>শব্দ · Shobdo — Bangla ⇄ English Dictionary</title>
+<meta name="description" content="An offline-first Bangla to English and English to Bangla dictionary with over 100,000 entries.">
+<meta name="theme-color" content="#0C4A3E">
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" href="./icon-192.png">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Hind+Siliguri:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FBF8F3;
+    --ink:#211D17;
+    --ink-soft:#5B564C;
+    --green:#0C4A3E;
+    --green-deep:#083830;
+    --vermillion:#C8442D;
+    --gold:#B98A1F;
+    --sand:#E7E0D2;
+    --sand-line:#D8CFBB;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Inter','Hind Siliguri',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  a{color:inherit;}
+  ::selection{ background:var(--gold); color:var(--cream); }
+  :focus-visible{ outline:2.5px solid var(--vermillion); outline-offset:2px; border-radius:4px; }
+
+  .wrap{ max-width:720px; margin:0 auto; padding:0 20px 64px; }
+
+  /* ---------- Header ---------- */
+  header.top{ display:flex; align-items:center; justify-content:space-between; padding:22px 0 6px; }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand-mark{ width:34px;height:34px;border-radius:9px; background:var(--green); display:flex;align-items:center;justify-content:center; flex:none; }
+  .brand-mark svg{width:19px;height:19px;}
+  .brand-name{ font-family:'Fraunces',serif; font-size:20px; font-weight:600; letter-spacing:0.2px; }
+  .brand-name .bn{ font-family:'Tiro Bangla',serif; color:var(--green); margin-right:2px; }
+  #install-btn{
+    display:none; align-items:center; gap:6px; background:transparent;
+    border:1.4px solid var(--green); color:var(--green);
+    font:500 13.5px 'Inter',sans-serif; padding:8px 14px; border-radius:100px; cursor:pointer;
+    transition:background .15s ease, color .15s ease;
+  }
+  #install-btn:hover{ background:var(--green); color:var(--cream); }
+
+  /* ---------- Hero ---------- */
+  .hero{ padding:30px 0 8px; text-align:center; }
+  .eyebrow-line{ display:flex;align-items:center;justify-content:center;gap:10px; margin-bottom:14px; color:var(--ink-soft); font-size:13px; }
+  .eyebrow-line svg{ width:120px; height:10px; }
+  h1.headline{ font-family:'Fraunces',serif; font-weight:500; font-size:clamp(30px,6vw,44px); line-height:1.12; margin:0 0 8px; }
+  h1.headline .bn-word{ font-family:'Tiro Bangla',serif; color:var(--green); display:block; font-size:1.15em; margin-bottom:2px; }
+  .sub{ color:var(--ink-soft); font-size:15.5px; max-width:460px; margin:0 auto 26px; line-height:1.55; }
+
+  /* ---------- Search ---------- */
+  .search-shell{ position:relative; margin:0 auto; }
+  .search-box{
+    display:flex; align-items:center; gap:10px; background:#fff;
+    border:1.6px solid var(--sand-line); border-radius:100px; padding:6px 8px 6px 20px;
+    box-shadow:0 1px 0 rgba(33,29,23,0.03); transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  .search-box:focus-within{ border-color:var(--green); box-shadow:0 0 0 3.5px rgba(12,74,62,0.10); }
+  .search-box svg.icon-search{ width:18px;height:18px; color:var(--ink-soft); flex:none; }
+  #search-input{
+    flex:1; border:none; outline:none; background:transparent;
+    font:500 18px/1.3 'Hind Siliguri','Inter',sans-serif; color:var(--ink); padding:10px 0; min-width:0;
+  }
+  #search-input::placeholder{ color:#A9A296; font-weight:400; }
+  #clear-btn{
+    display:none; border:none;background:var(--sand);color:var(--ink-soft);
+    width:26px;height:26px;border-radius:50%; cursor:pointer; font-size:14px; flex:none;
+    align-items:center;justify-content:center;
+  }
+
+  .direction-row{ display:flex; justify-content:center; margin-top:16px; }
+  .direction-toggle{ display:inline-flex; background:var(--sand); padding:4px; border-radius:100px; gap:2px; }
+  .direction-toggle button{
+    border:none; background:transparent; color:var(--ink-soft); font:500 13.5px 'Inter',sans-serif;
+    padding:8px 16px; border-radius:100px; cursor:pointer; display:flex; align-items:center; gap:7px;
+    transition:background .15s ease, color .15s ease;
+  }
+  .direction-toggle button .bnf{ font-family:'Tiro Bangla',serif; font-size:15px; }
+  .direction-toggle button.active{ background:var(--green); color:var(--cream); }
+
+  /* ---------- Alphabet index ---------- */
+  .alphabet{ margin-top:26px; display:flex; gap:6px; overflow-x:auto; padding:4px 2px 10px; scrollbar-width:none; }
+  .alphabet::-webkit-scrollbar{ display:none; }
+  .alpha-chip{
+    flex:none; border:1.3px solid var(--sand-line); background:#fff; color:var(--ink-soft);
+    font:600 12.5px 'Inter',sans-serif; width:32px; height:32px; border-radius:50%;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition:border-color .15s ease, color .15s ease, background .15s ease;
+  }
+  .alpha-chip:hover{ border-color:var(--green); color:var(--green); }
+  .alpha-chip.active{ background:var(--vermillion); border-color:var(--vermillion); color:#fff; }
+
+  /* ---------- Status line ---------- */
+  .status-line{
+    display:flex; align-items:baseline; justify-content:space-between; margin:28px 0 6px;
+    padding-bottom:10px; border-bottom:1.4px solid var(--ink);
+  }
+  .status-line .count{ font-family:'Fraunces',serif; font-size:15px; color:var(--ink); }
+  .status-line .offline-pill{ font-size:11.5px; color:var(--vermillion); display:none; align-items:center; gap:5px; font-weight:600; }
+  .status-line .offline-pill.show{ display:flex; }
+  .status-line .offline-pill::before{ content:""; width:6px;height:6px;border-radius:50%; background:var(--vermillion); }
+
+  /* ---------- Results ---------- */
+  #results{ list-style:none; margin:0; padding:0; }
+  .entry{ padding:20px 0; border-bottom:1px solid var(--sand-line); display:grid; grid-template-columns:1fr; gap:7px; }
+  .entry:last-child{ border-bottom:none; }
+  .entry-head{ display:flex; align-items:baseline; flex-wrap:wrap; gap:10px; row-gap:4px; }
+  .headword{ font-family:'Fraunces',serif; font-weight:500; font-size:24px; color:var(--green-deep); line-height:1.2; }
+  .headword.is-bn{ font-family:'Tiro Bangla',serif; font-weight:400; font-size:26px; }
+  .pos{
+    font-size:11px; text-transform:lowercase; color:var(--gold);
+    border:1px solid var(--gold); border-radius:5px; padding:1.5px 7px; letter-spacing:.2px;
+  }
+  .meaning{ font-size:17px; color:var(--ink); font-family:'Hind Siliguri','Inter',sans-serif; }
+  .meaning.is-en{ font-family:'Inter',sans-serif; }
+  .meaning .arrow{ color:var(--vermillion); margin-right:6px; font-family:'Inter',sans-serif; }
+  .also-line{ font-size:13px; color:var(--ink-soft); }
+  .also-line .bnf{ font-family:'Tiro Bangla',serif; }
+
+  /* ---------- Empty / prompt state ---------- */
+  .empty{ text-align:center; padding:56px 10px; color:var(--ink-soft); }
+  .empty svg{ width:46px;height:46px;color:var(--sand-line);margin-bottom:14px; }
+  .empty p{ margin:4px 0; }
+  .empty .big{ font-family:'Fraunces',serif; font-size:19px; color:var(--ink); }
+
+  .truncate-note{ text-align:center; color:var(--ink-soft); font-size:13px; padding:18px 0 4px; }
+
+  footer{
+    margin-top:44px; padding-top:18px; border-top:1px solid var(--sand-line);
+    color:var(--ink-soft); font-size:12.5px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  }
+
+  @media (max-width:480px){ .wrap{ padding:0 16px 48px; } .headword{ font-size:21px; } .headword.is-bn{ font-size:23px; } }
+  @media (prefers-reduced-motion:reduce){ *{ transition:none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 6c3 0 6 1 8 2.5V19c-2-1.5-5-2.5-8-2.5V6Z" fill="#FBF8F3"/>
+          <path d="M20 6c-3 0-6 1-8 2.5V19c2-1.5 5-2.5 8-2.5V6Z" fill="#FBF8F3"/>
+          <circle cx="17.3" cy="8.2" r="1.5" fill="#C8442D"/>
+        </svg>
+      </div>
+      <div class="brand-name"><span class="bn">শব্দ</span> Shobdo</div>
+    </div>
+    <button id="install-btn" type="button">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v13m0 0-5-5m5 5 5-5M4 21h16"/></svg>
+      Install
+    </button>
+  </header>
+
+  <section class="hero">
+    <div class="eyebrow-line" aria-hidden="true">
+      <svg viewBox="0 0 120 10"><path d="M0 5 H45" stroke="#D8CFBB" stroke-width="1.4"/><circle cx="60" cy="5" r="3" fill="#C8442D"/><path d="M75 5 H120" stroke="#D8CFBB" stroke-width="1.4"/></svg>
+    </div>
+    <h1 class="headline"><span class="bn-word">খুঁজে নিন</span>Find your word</h1>
+    <p class="sub" id="sub-copy">A pocket dictionary that works even without signal. Search in Bangla or English — everything is saved right on your device.</p>
+
+    <div class="search-shell">
+      <div class="search-box">
+        <svg class="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="search-input" type="text" inputmode="search" autocomplete="off" spellcheck="false"
+               placeholder="Type a word… লিখুন…" aria-label="Search the dictionary">
+        <button id="clear-btn" type="button" aria-label="Clear search">✕</button>
+      </div>
+    </div>
+
+    <div class="direction-row">
+      <div class="direction-toggle" role="group" aria-label="Search direction">
+        <button type="button" data-dir="all" class="active">All</button>
+        <button type="button" data-dir="en">EN → <span class="bnf">বাং</span></button>
+        <button type="button" data-dir="bn"><span class="bnf">বাং</span> → EN</button>
+      </div>
+    </div>
+
+    <div class="alphabet" id="alphabet"></div>
+  </section>
+
+  <div class="status-line">
+    <span class="count" id="result-count">Loading dictionary…</span>
+    <span class="offline-pill" id="offline-pill">Offline</span>
+  </div>
+
+  <ul id="results" aria-live="polite"></ul>
+  <div class="truncate-note" id="truncate-note" style="display:none;"></div>
+
+  <div class="empty" id="empty-state" style="display:none;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+    <p class="big" id="empty-title">No entries found</p>
+    <p id="empty-sub">Try a different spelling, or browse a letter above.</p>
+  </div>
+
+  <footer>
+    <span id="footer-count">Loading…</span>
+    <span>Works fully offline once installed</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var DATA = [];              // [{e, b, p?}]
+  var RESULT_CAP = 200;
+
+  var els = {
+    input: document.getElementById('search-input'),
+    clear: document.getElementById('clear-btn'),
+    results: document.getElementById('results'),
+    empty: document.getElementById('empty-state'),
+    emptyTitle: document.getElementById('empty-title'),
+    emptySub: document.getElementById('empty-sub'),
+    count: document.getElementById('result-count'),
+    footerCount: document.getElementById('footer-count'),
+    alphabet: document.getElementById('alphabet'),
+    offlinePill: document.getElementById('offline-pill'),
+    installBtn: document.getElementById('install-btn'),
+    truncateNote: document.getElementById('truncate-note')
+  };
+
+  var state = { dir: 'all', letter: null, q: '' };
+
+  function normalize(s){ return (s || '').toString().trim().toLowerCase(); }
+
+  // ---------- Load data ----------
+  fetch('./dictionary.json')
+    .then(function(r){ return r.json(); })
+    .then(function(json){
+      DATA = json;
+      var n = DATA.length.toLocaleString();
+      els.count.textContent = n + ' words ready offline';
+      els.footerCount.textContent = n + ' entries, sourced dictionary data';
+      buildAlphabet();
+      render();
+    })
+    .catch(function(){
+      els.count.textContent = 'Could not load dictionary';
+      els.empty.style.display = 'block';
+      els.emptyTitle.textContent = 'Could not load the dictionary';
+      els.emptySub.textContent = 'Please reload the app.';
+    });
+
+  function buildAlphabet(){
+    var letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    var frag = document.createDocumentFragment();
+    letters.forEach(function(L){
+      var chip = document.createElement('button');
+      chip.className = 'alpha-chip';
+      chip.type = 'button';
+      chip.textContent = L;
+      chip.addEventListener('click', function(){ toggleLetter(L); });
+      frag.appendChild(chip);
+    });
+    els.alphabet.appendChild(frag);
+  }
+
+  function toggleLetter(L){
+    state.letter = (state.letter === L) ? null : L;
+    var chips = els.alphabet.querySelectorAll('.alpha-chip');
+    chips.forEach(function(chip){
+      chip.classList.toggle('active', chip.textContent === state.letter);
+    });
+    render();
+  }
+
+  // ---------- Direction toggle ----------
+  document.querySelectorAll('.direction-toggle button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.direction-toggle button').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      state.dir = btn.getAttribute('data-dir');
+      els.input.placeholder = state.dir === 'bn' ? 'বাংলা শব্দ লিখুন…' : (state.dir === 'en' ? 'Type an English word…' : 'Type a word… লিখুন…');
+      render();
+    });
+  });
+
+  // ---------- Search input ----------
+  els.input.addEventListener('input', function(){
+    state.q = els.input.value;
+    els.clear.style.display = state.q ? 'flex' : 'none';
+    render();
+  });
+  els.clear.addEventListener('click', function(){
+    els.input.value = '';
+    state.q = '';
+    els.clear.style.display = 'none';
+    els.input.focus();
+    render();
+  });
+
+  // ---------- Filtering ----------
+  function matchesQuery(entry, q, nq){
+    if (!q) return true;
+    if (state.dir === 'en') return entry.e.toLowerCase().indexOf(nq) !== -1;
+    if (state.dir === 'bn') return entry.b.indexOf(q) !== -1;
+    return entry.e.toLowerCase().indexOf(nq) !== -1 || entry.b.indexOf(q) !== -1;
+  }
+
+  function matchesLetter(entry, L){
+    if (!L) return true;
+    return entry.e.charAt(0).toUpperCase() === L;
+  }
+
+  function rank(e, q, nq){
+    var eLower = e.e.toLowerCase();
+    if (eLower === nq || e.b === q) return 0;
+    if (eLower.indexOf(nq) === 0) return 1;
+    return 2;
+  }
+
+  function render(){
+    var q = state.q.trim();
+    var nq = normalize(q);
+    var letter = state.letter;
+
+    if (!q && !letter){
+      els.results.innerHTML = '';
+      els.truncateNote.style.display = 'none';
+      els.empty.style.display = 'block';
+      els.emptyTitle.textContent = 'Start typing, or pick a letter';
+      els.emptySub.textContent = DATA.length ? DATA.length.toLocaleString() + ' entries are ready to search — fully offline.' : 'Loading…';
+      els.count.textContent = DATA.length.toLocaleString() + ' words ready offline';
+      return;
+    }
+
+    var list = [];
+    for (var i = 0; i < DATA.length; i++){
+      var e = DATA[i];
+      if (matchesLetter(e, letter) && matchesQuery(e, q, nq)) list.push(e);
+    }
+
+    if (q){
+      list.sort(function(a,b){ return rank(a, q, nq) - rank(b, q, nq); });
+    }
+
+    els.empty.style.display = list.length ? 'none' : 'block';
+    if (!list.length){
+      els.emptyTitle.textContent = 'No entries found';
+      els.emptySub.textContent = 'Try a different spelling, or browse a letter above.';
+    }
+
+    var shown = list.slice(0, RESULT_CAP);
+    els.results.innerHTML = '';
+    var frag = document.createDocumentFragment();
+    shown.forEach(function(e){ frag.appendChild(renderEntry(e, q)); });
+    els.results.appendChild(frag);
+
+    if (list.length > RESULT_CAP){
+      els.truncateNote.style.display = 'block';
+      els.truncateNote.textContent = 'Showing ' + RESULT_CAP + ' of ' + list.length.toLocaleString() + ' matches — keep typing to narrow it down.';
+    } else {
+      els.truncateNote.style.display = 'none';
+    }
+
+    els.count.textContent = list.length.toLocaleString() + (list.length === 1 ? ' match' : ' matches');
+  }
+
+  function splitSenses(b){
+    return b.split(', ').map(function(s){ return s.trim(); }).filter(Boolean);
+  }
+
+  function findMatchedSense(entry, q){
+    var senses = splitSenses(entry.b);
+    for (var i = 0; i < senses.length; i++){
+      if (senses[i].indexOf(q) !== -1) return senses[i];
+    }
+    return senses[0];
+  }
+
+  function renderPosBadges(posStr){
+    if (!posStr) return null;
+    var wrap = document.createElement('span');
+    posStr.split(',').forEach(function(tag){
+      tag = tag.trim();
+      if (!tag) return;
+      var b = document.createElement('span');
+      b.className = 'pos';
+      b.textContent = tag;
+      b.style.marginRight = '5px';
+      wrap.appendChild(b);
+    });
+    return wrap;
+  }
+
+  function renderEntry(e, q){
+    var li = document.createElement('li');
+    li.className = 'entry';
+
+    var bnMode = state.dir === 'bn' && q;
+
+    var head = document.createElement('div');
+    head.className = 'entry-head';
+
+    var hw = document.createElement('span');
+    var meaning = document.createElement('div');
+    meaning.className = 'meaning';
+
+    if (bnMode){
+      var matched = findMatchedSense(e, q);
+      hw.className = 'headword is-bn';
+      hw.textContent = matched;
+      head.appendChild(hw);
+
+      var badges = renderPosBadges(e.p);
+      if (badges) head.appendChild(badges);
+
+      meaning.classList.add('is-en');
+      var arrow = document.createElement('span');
+      arrow.className = 'arrow';
+      arrow.textContent = '—';
+      meaning.appendChild(arrow);
+      meaning.appendChild(document.createTextNode(e.e));
+
+      var senses = splitSenses(e.b).filter(function(s){ return s !== matched; });
+      if (senses.length){
+        var also = document.createElement('div');
+        also.className = 'also-line';
+        also.innerHTML = 'also: <span class="bnf">' + senses.slice(0,6).join(', ') + '</span>';
+        li.appendChild(head);
+        li.appendChild(meaning);
+        li.appendChild(also);
+        return li;
+      }
+    } else {
+      hw.className = 'headword';
+      hw.textContent = e.e;
+      head.appendChild(hw);
+
+      var badges2 = renderPosBadges(e.p);
+      if (badges2) head.appendChild(badges2);
+
+      var arrow2 = document.createElement('span');
+      arrow2.className = 'arrow';
+      arrow2.textContent = '—';
+      meaning.appendChild(arrow2);
+      meaning.appendChild(document.createTextNode(e.b));
+    }
+
+    li.appendChild(head);
+    li.appendChild(meaning);
+    return li;
+  }
+
+  // ---------- Offline detection ----------
+  function updateOnlineStatus(){ els.offlinePill.classList.toggle('show', !navigator.onLine); }
+  window.addEventListener('online', updateOnlineStatus);
+  window.addEventListener('offline', updateOnlineStatus);
+  updateOnlineStatus();
+
+  // ---------- Service worker ----------
+  if ('serviceWorker' in navigator){
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('./sw.js').catch(function(){ /* ignore */ });
+    });
+  }
+
+  // ---------- Install prompt ----------
+  var deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault();
+    deferredPrompt = e;
+    els.installBtn.style.display = 'inline-flex';
+  });
+  els.installBtn.addEventListener('click', function(){
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.finally(function(){
+      deferredPrompt = null;
+      els.installBtn.style.display = 'none';
+    });
+  });
+  window.addEventListener('appinstalled', function(){ els.installBtn.style.display = 'none'; });
+
+})();
+</script>
+</body>
+</html>
