@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>শব্দ · Shobdo — Bangla ⇄ English Dictionary</title>
-<meta name="description" content="An offline-first Bangla to English and English to Bangla dictionary with over 100,000 entries.">
+<title>শব্দ · Shobdo | Bangla ⇄ English Dictionary</title>
+<meta name="description" content="Shobdo is an offline-first Progressive Web App that functions as a comprehensive English-Bangla and Bangla-English dictionary.">
 <meta name="theme-color" content="#0C4A3E">
 <link rel="manifest" href="./manifest.json">
 <link rel="icon" href="./icon-192.png">
@@ -174,7 +174,7 @@
       <svg viewBox="0 0 120 10"><path d="M0 5 H45" stroke="#D8CFBB" stroke-width="1.4"/><circle cx="60" cy="5" r="3" fill="#C8442D"/><path d="M75 5 H120" stroke="#D8CFBB" stroke-width="1.4"/></svg>
     </div>
     <h1 class="headline"><span class="bn-word">খুঁজে নিন</span>Find your word</h1>
-    <p class="sub" id="sub-copy">A pocket dictionary that works even without signal. Search in Bangla or English — everything is saved right on your device.</p>
+    <p class="sub" id="sub-copy">Shobdo is a comprehensive Progressive Web App that serves as an English-Bangla and Bangla-English dictionary, designed for seamless linguistic reference.</p>
 
     <div class="search-shell">
       <div class="search-box">
@@ -212,7 +212,7 @@
 
   <footer>
     <span id="footer-count">Loading…</span>
-    <span>Works fully offline once installed</span>
+    <span>Version 1.0.0 Beta, Developed by Tasmon Islam</span>
   </footer>
 </div>
 
@@ -249,7 +249,7 @@
       DATA = json;
       var n = DATA.length.toLocaleString();
       els.count.textContent = n + ' words ready offline';
-      els.footerCount.textContent = n + ' entries, sourced dictionary data';
+      els.footerCount.textContent = n + ' entries, Credit - Minhas Kamal';
       buildAlphabet();
       render();
     })
@@ -338,7 +338,7 @@
       els.truncateNote.style.display = 'none';
       els.empty.style.display = 'block';
       els.emptyTitle.textContent = 'Start typing, or pick a letter';
-      els.emptySub.textContent = DATA.length ? DATA.length.toLocaleString() + ' entries are ready to search — fully offline.' : 'Loading…';
+      els.emptySub.textContent = DATA.length ? DATA.length.toLocaleString() + ' entries are ready to search ' : 'Loading…';
       els.count.textContent = DATA.length.toLocaleString() + ' words ready offline';
       return;
     }
